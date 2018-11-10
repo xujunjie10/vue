@@ -19,7 +19,9 @@
 </template>
 <script>
 // 引入axios
-import axios from 'axios'
+// import axios from 'axios'
+// 引入接口
+import {postLogin} from '@/api'
 export default {
   data () {
     return {
@@ -42,15 +44,30 @@ export default {
         if (isPass) {
           // console.log('登录了')
           // 调用接口发送请求
-          axios.post('http://localhost:8888/api/private/v1/login', {username: this.loginForm.username, password: this.loginForm.password})
+          // axios.post('http://localhost:8888/api/private/v1/login', {username: this.loginForm.username, password: this.loginForm.password})
+          //   .then(res => {
+          //     // console.log(res)
+          //     if (res.data.meta.status === 200) {
+          //       this.$router.push('/')
+          //       this.$message.success(res.data.meta.msg)
+          //     } else {
+          //       // console.log('登录失败了')
+          //       this.$message.error(res.data.meta.msg)
+          //     }
+          //   })
+          postLogin({username: this.loginForm.username, password: this.loginForm.password})
             .then(res => {
-              // console.log(res)
-              if (res.data.meta.status === 200) {
-                this.$router.push('/')
-                this.$message.success(res.data.meta.msg)
+              if (res.meta.status === 200) {
+                this.$message.success(res.meta.msg)
+                // console.log(res)
+                // 将服务器返回的token保存到本地
+                localStorage.setItem('mytoken', res.data.token)
+                localStorage.setItem('username', res.data.username)
+                this.$router.push({name: 'home'})
               } else {
-                // console.log('登录失败了')
-                this.$message.error(res.data.meta.msg)
+                console.log('登录失败了')
+
+                this.$message.error(res.meta.msg)
               }
             })
         } else {
