@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <el-form class="container" :model="loginForm" :rules="myrules">
+    <el-form class="container" :model="loginForm" :rules="myrules" ref="loginForm">
       <el-form-item class="avatar">
         <img src="../assets/avatar.jpg" alt="">
       </el-form-item>
@@ -11,23 +11,54 @@
         <el-input prefix-icon="myicon myicon-key" v-model="loginForm.password" type="password"></el-input>
       </el-form-item>
       <div>
-          <el-button type="primary" class="login-btn">登录</el-button>
+        <!-- 2.2 点击的时候将ref的值作为参数传递到函数submitLogin中去,注意加上引号⭐ -->
+          <el-button type="primary" class="login-btn" @click="subLogin('loginForm')">登录</el-button>
       </div>
     </el-form>
   </div>
 </template>
 <script>
+// 引入axios
+import axios from 'axios'
 export default {
   data () {
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       myrules: {
         username: { required: true, message: '请输入用户名', trigger: 'blur' },
         password: { required: true, message: '请输入密码', trigger: 'blur' }
       }
+    }
+  },
+  methods: {
+    subLogin (refval) {
+      // alert(123)
+      // 2.3 发请求之前，先利用validate()方法对表单进行校验,validate方法在element-ui中已封装好
+      this.$refs[refval].validate(isPass => {
+        // 参数isPass是一个布尔值，为true表示校验通过，则可以进行下一步发请求，为false表示校验失败
+        if (isPass) {
+          // console.log('登录了')
+          // 调用接口发送请求
+          axios.post('http://localhost:8888/api/private/v1/login', {username: this.loginForm.username, password: this.loginForm.password})
+            .then(res => {
+              // console.log(res)
+              if (res.data.meta.status === 200) {
+                this.$router.push('/')
+                this.$message.success(res.data.meta.msg)
+              } else {
+                // console.log('登录失败了')
+                this.$message.error(res.data.meta.msg)
+              }
+            })
+        } else {
+          console.log('失败了')
+          this.$message.warning('请正确填写表单')
+          return false
+        }
+      })
     }
   }
 }
