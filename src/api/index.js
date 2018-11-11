@@ -22,3 +22,8 @@ export const postLogin = obj => {
   return axios.post('/login', obj)
     .then(res => res.data)
 }
+// 用户数据列表
+export const getUserList = obj => {
+  return axios.get('/users', { params: obj })
+    .then(res => res.data)
+}
