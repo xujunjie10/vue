@@ -27,3 +27,12 @@ export const getUserList = obj => {
   return axios.get('/users', { params: obj })
     .then(res => res.data)
 }
+// 添加用户
+export const addUser = obj => axios.post('/users', obj).then(res => res.data)
+// 删除用户
+export const delUser = id => axios.delete(`users/${id}`).then(res => res.data)
+// 编辑用户提交
+export const editUser = obj => axios.put(`/users/${obj.id}`, { email: obj.email, mobile: obj.mobile }).then(res => res.data)
+
+// 修改用户状态
+export const chackState = (uId, type) => axios.put(`users/${uId}/state/${type}`).then(res => res.data)
