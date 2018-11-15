@@ -36,3 +36,9 @@ export const editUser = obj => axios.put(`/users/${obj.id}`, { email: obj.email,
 
 // 修改用户状态
 export const chackState = (uId, type) => axios.put(`users/${uId}/state/${type}`).then(res => res.data)
+
+// 动态获取左侧菜单
+export const getLeftList = () => axios.get('/menus').then(res => res.data)
+
+// 获取商品分类数据
+export const getCatUserList = (type, pagenum, pagesize) => axios.get('/categories', {params: {type: type, pagenum: pagenum, pagesize: pagesize}}).then(res => res.data)

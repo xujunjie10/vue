@@ -14,13 +14,13 @@
               class="el-menu-admin"
               @open="handleOpen"
               @close="handleClose">
-              <el-submenu index="1">
+              <el-submenu :index="item.path" v-for="item in menuList" :key="item.id">
                 <template slot="title">
                   <i class="el-icon-location"></i>
-                  <span>用户管理</span>
+                  <span>{{item.authName}}</span>
                 </template>
                  <!-- 这里需要index改为一个路径 -->
-                  <el-menu-item index="/users"><i class="el-icon-menu"></i>用户列表</el-menu-item>
+                  <el-menu-item :index="secItem.path" v-for="secItem in item.children" :key="secItem.id"><i class="el-icon-menu"></i>{{secItem.authName}}</el-menu-item>
               </el-submenu>
             </el-menu>
       </el-aside>
@@ -44,12 +44,17 @@
     </div>
 </template>
 <script>
+import {getLeftList} from '@/api'
 export default {
   data () {
     return {
       isCollapse: false,
-      username: ''
+      username: '',
+      menuList: []
     }
+  },
+  created () {
+    this.initTable()
   },
   methods: {
     toggle () {
@@ -66,6 +71,14 @@ export default {
       localStorage.removeItem('mytoken')
       // 跳转到登录页面
       this.$router.push('/login')
+    },
+    // 初始化页面
+    initTable () {
+      getLeftList()
+        .then(res => {
+          // console.log(res)
+          this.menuList = res.data
+        })
     }
   },
   mounted () {
