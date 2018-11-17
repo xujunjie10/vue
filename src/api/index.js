@@ -42,3 +42,10 @@ export const getLeftList = () => axios.get('/menus').then(res => res.data)
 
 // 获取商品分类数据
 export const getCatUserList = (type, pagenum, pagesize) => axios.get('/categories', {params: {type: type, pagenum: pagenum, pagesize: pagesize}}).then(res => res.data)
+
+// 角色列表页面数据获取
+export const getRolesList = () => axios.get('/roles').then(res => res.data)
+
+// 删除角色指定权限
+export const delRolesuser = (roleId, rightId) => axios.delete(`/roles/${roleId}/rights/${rightId}
+`).then(res => res.data)

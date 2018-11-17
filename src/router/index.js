@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue'
 import Home from '@/views/Home.vue'
 import Welcome from '@/views/Welcome.vue'
 import Users from '@/views/Users.vue'
+import Roles from '@/views/auth/Roles.vue'
 import Categories from '@/views/goods/Categories.vue'
 import '@/styles/index.scss'
 Vue.use(Router)
@@ -30,6 +31,11 @@ export default new Router({
           path: 'users',
           name: 'users',
           component: Users
+        },
+        {
+          path: 'roles',
+          name: 'roles',
+          component: Roles
         },
         {
           path: 'categories',
